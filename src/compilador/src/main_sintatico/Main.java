@@ -2,6 +2,8 @@ package compilador.src.main_sintatico;
 
 import compilador.src.analisador_lexico.*;
 import compilador.src.analisador_sintatico.*;
+
+import java.io.FileReader;
 import java.io.IOException;
 
 public class Main {
@@ -10,8 +12,8 @@ public class Main {
 
         String fileName = "teste1.txt";
 
-        Lexer lexema = new Lexer(fileName);
-        sintatico analisadorSintatico = new sintatico(lexema);
+        Lexer lutor = new Lexer(fileName);
+        sintatico analisadorSintatico = new sintatico(lutor);
 
         analisadorSintatico.scanner();
 
