@@ -140,7 +140,12 @@ public class sintatico {
     }
 
     private void stmt_list() throws Exception{
-        if (tagToken.match(Tag.RESTO1_IDENTIFICADOR)){
+        if (tagToken.match(Tag.RESTO1_IDENTIFICADOR)
+        ||  tagToken.match(Tag.P9_IF)
+        ||  tagToken.match(Tag.P14_WHILE)
+        ||  tagToken.match(Tag.P12_REPEAT)
+        ||  tagToken.match(Tag.P16_IN)
+        ||  tagToken.match(Tag.P17_OUT)){
             stmt();
             stmt_novo();
         } else {
@@ -152,7 +157,78 @@ public class sintatico {
     }
 
     private void stmt() throws Exception{
+        if(tagToken.match(Tag.RESTO1_IDENTIFICADOR)){
+            assign_stmt();
+        } else if(tagToken.match(Tag.P9_IF)){
+            if_stmt();
+        } else if(tagToken.match(Tag.P14_WHILE)){
+            while_stmt();
+        } else if(tagToken.match(Tag.P12_REPEAT)){
+            repeat_stmt();
+        } else if(tagToken.match(Tag.P16_IN)){
+            read_stmt();
+        } else if(tagToken.match(Tag.P17_OUT)){
+            write_stmt();
+        } else{
+            throw tokenDesconhecido();
+        }
+    }
 
+    private void write_stmt() throws Exception{
+        if(tagToken.match(Tag.P17_OUT)){
+            eat(Tag.P17_OUT);
+            eat(Tag.RESTO7_ESCREVER);
+            writable();
+        }
+        else{
+            throw tokenDesconhecido();
+        }
+    }
+
+    private void writable() {
+    }
+
+    private void read_stmt() throws Exception{
+        if(tagToken.match(Tag.P16_IN)){
+            eat(Tag.P16_IN);
+            eat(Tag.RESTO6_LER);
+            eat(Tag.RESTO1_IDENTIFICADOR);
+        }
+        else{
+            throw tokenDesconhecido();
+        }
+    }
+
+    private void repeat_stmt() throws Exception{
+        if(tagToken.match(Tag.P12_REPEAT)){
+            eat(Tag.P12_REPEAT);
+            stmt_list();
+            eat(Tag.RESTO1_IDENTIFICADOR);
+        }
+        else{
+            throw tokenDesconhecido();
+        }
+
+    }
+
+    private void while_stmt() throws Exception{
+    }
+
+    private void if_stmt() throws Exception{
+    }
+
+    private void assign_stmt() throws Exception{
+        if(tagToken.match(Tag.RESTO1_IDENTIFICADOR)) {
+            eat(Tag.RESTO1_IDENTIFICADOR);
+            eat(Tag.OP13_IGUAL);
+            simple_expr();
+        }
+        else {
+            throw tokenDesconhecido();
+        }
+    }
+
+    private void simple_expr() {
     }
 
 }
