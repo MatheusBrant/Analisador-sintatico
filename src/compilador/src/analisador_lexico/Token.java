@@ -9,5 +9,7 @@ public class Token {
         public String toString(){
             return "" + tagToken;
         }
-
+        public boolean match(Tag tagName) {
+            return this.tagToken == tagName;
+        }
 }
