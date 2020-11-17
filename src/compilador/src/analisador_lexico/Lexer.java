@@ -28,7 +28,7 @@ public class Lexer {
         reserve(new Word("program",Tag.P1_PROGRAM));
         reserve(new Word("is",Tag.P2_IS));
         reserve(new Word("declare",Tag.P3_DECLARE));
-        reserve(new Word("init",Tag.P4_INIT));
+        reserve(new Word("begin",Tag.P4_INIT));
         reserve(new Word("end",Tag.P5_END));
         reserve(new Word("int",Tag.P6_INT));
         reserve(new Word("float",Tag.P7_FLOAT));
@@ -42,7 +42,7 @@ public class Lexer {
         reserve(new Word("do",Tag.P15_DO));
         reserve(new Word("in",Tag.P16_IN));
         reserve(new Word("out",Tag.P17_OUT));
-        reserve(new Word("end.",Tag.P18_END_FINAL));
+        reserve(new Word("end",Tag.P18_END_FINAL));
 
         int lines = 0;
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
@@ -54,6 +54,10 @@ public class Lexer {
     }
     private void readch() throws IOException{
         ch = (char) file.read();
+    }
+
+    public long getLine() {
+        return this.line;
     }
 
     private boolean readch(char c) throws IOException{

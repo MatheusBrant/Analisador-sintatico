@@ -14,10 +14,10 @@ public class sintatico {
     }
 
     private Exception tokenDesconhecido(){
-        return new Exception("Token desconhecido");
+        return new Exception("Erro: token inesperado encontrado na linha " + lexema.getLine() + ": " + tagToken.toString());
     }
 
-    public void scanner(){
+    public void scanner() throws Exception{
         try {
             tagToken = lexema.scan();
         } catch (IOException e) {
@@ -25,27 +25,23 @@ public class sintatico {
         }
     }
 
-    void eat(Tag tagName) throws Exception {
+    public void eat(Tag tagName) throws Exception {
         if (tagToken.match(tagName)) {
-            try {
-                scanner();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+          scanner();
         } else {
             throw tokenDesconhecido();
         }
     }
     
-    void start() throws Exception{
-        programNovo();
+    public void start() throws Exception{
+        program_novo();
         System.out.println("\nFim da análise.\n");
     }
 
-    private void programNovo() throws Exception {
+    private void program_novo() throws Exception {
         if(tagToken.match(Tag.P1_PROGRAM)){
             program_main();
-            body();
+            eat(Tag.RESTO9_FIM_ARQUIVO);
         }
         else{
             throw tokenDesconhecido();
@@ -70,10 +66,13 @@ public class sintatico {
             eat(Tag.P4_INIT);
             stmt_list();
             eat(Tag.P18_END_FINAL);
+            eat(Tag.PONT1_PONTO);
         }
         else if(tagToken.match(Tag.P4_INIT)){
+            eat(Tag.P4_INIT);
             stmt_list();
             eat(Tag.P18_END_FINAL);
+            eat(Tag.PONT1_PONTO);
         } else {
             throw tokenDesconhecido();
         }
@@ -125,7 +124,10 @@ public class sintatico {
             eat(Tag.PONT4_VIRGULA);
             eat(Tag.RESTO1_IDENTIFICADOR);
             ident_novo();
-        } else{
+        } else if(tagToken.match(Tag.PONT6_DOIS_PONTOS)){
+            //LAMBDA
+        }
+        else{
             throw tokenDesconhecido();
         }
     }
@@ -133,8 +135,12 @@ public class sintatico {
     private void decl_novo() throws Exception{
         if(tagToken.match(Tag.PONT5_PONTO_E_VIRGULA)){
             eat(Tag.PONT5_PONTO_E_VIRGULA);
+            decl();
             decl_novo();
-        } else{
+        } else if(tagToken.match(Tag.P4_INIT)){
+            //LAMBDA
+        }
+        else{
             throw tokenDesconhecido();
         }
     }
@@ -158,7 +164,12 @@ public class sintatico {
             eat(Tag.PONT5_PONTO_E_VIRGULA);
             stmt();
             stmt_novo();
-        } else {
+        } else if(tagToken.match(Tag.P11_ELSE)
+                ||tagToken.match(Tag.P13_UNTIL)
+                ||tagToken.match(Tag.P18_END_FINAL)){
+            //LAMBDA
+        }
+        else {
             throw tokenDesconhecido();
         }
     }
@@ -198,7 +209,7 @@ public class sintatico {
         || tagToken.match(Tag.RESTO4_FLOAT_CONST)
         || tagToken.match(Tag.RESTO5_CHAR_CONST)
         || tagToken.match(Tag.PONT2_ABRE_PAR)
-        || tagToken.match(Tag.OP6_DIFERENTE)
+        || tagToken.match(Tag.OP14_NEGACAO)
         || tagToken.match(Tag.OP8_MENOS)){
           simple_expr();
         } else if (tagToken.match(Tag.RESTO2_LITERAL)){
@@ -270,7 +281,7 @@ public class sintatico {
         || tagToken.match(Tag.RESTO4_FLOAT_CONST)
         || tagToken.match(Tag.RESTO5_CHAR_CONST)
         || tagToken.match(Tag.PONT2_ABRE_PAR)
-        || tagToken.match(Tag.OP6_DIFERENTE)
+        || tagToken.match(Tag.OP14_NEGACAO)
         || tagToken.match(Tag.OP8_MENOS)){
             expression();
         } 
@@ -285,7 +296,7 @@ public class sintatico {
         || tagToken.match(Tag.RESTO4_FLOAT_CONST)
         || tagToken.match(Tag.RESTO5_CHAR_CONST)
         || tagToken.match(Tag.PONT2_ABRE_PAR)
-        || tagToken.match(Tag.OP6_DIFERENTE)
+        || tagToken.match(Tag.OP14_NEGACAO)
         || tagToken.match(Tag.OP8_MENOS)){
             simple_expr();
             expression_novo();
@@ -304,6 +315,14 @@ public class sintatico {
         || tagToken.match(Tag.OP6_DIFERENTE)){
             relop();
             simple_expr();
+        } else if(tagToken.match(Tag.PONT5_PONTO_E_VIRGULA)
+                || tagToken.match(Tag.P15_DO)
+                || tagToken.match(Tag.P11_ELSE)
+                || tagToken.match(Tag.P13_UNTIL)
+                || tagToken.match(Tag.P10_THEN)
+                || tagToken.match(Tag.P18_END_FINAL)
+                || tagToken.match(Tag.PONT3_FECHA_PAR)){
+            //LAMBDA
         }
         else{
             throw tokenDesconhecido();
@@ -371,8 +390,9 @@ public class sintatico {
                 || tagToken.match(Tag.RESTO4_FLOAT_CONST)
                 || tagToken.match(Tag.RESTO5_CHAR_CONST)
                 || tagToken.match(Tag.PONT2_ABRE_PAR)
-                || tagToken.match(Tag.OP6_DIFERENTE)
+                || tagToken.match(Tag.OP14_NEGACAO)
                 || tagToken.match(Tag.OP8_MENOS)){
+            term();
             simple_expr_novo();
         }
         else{
@@ -412,7 +432,7 @@ public class sintatico {
                 || tagToken.match(Tag.RESTO4_FLOAT_CONST)
                 || tagToken.match(Tag.RESTO5_CHAR_CONST)
                 || tagToken.match(Tag.PONT2_ABRE_PAR)
-                || tagToken.match(Tag.OP6_DIFERENTE)
+                || tagToken.match(Tag.OP14_NEGACAO)
                 || tagToken.match(Tag.OP8_MENOS)){
             factor_a();
             term_novo();
@@ -455,8 +475,8 @@ public class sintatico {
                 || tagToken.match(Tag.RESTO5_CHAR_CONST)
                 || tagToken.match(Tag.PONT2_ABRE_PAR)){
             factor();
-        } else if(tagToken.match(Tag.OP6_DIFERENTE)){
-            eat(Tag.OP6_DIFERENTE);
+        } else if(tagToken.match(Tag.OP14_NEGACAO)){
+            eat(Tag.OP14_NEGACAO);
             factor();
         } else if(tagToken.match(Tag.OP8_MENOS)){
             eat(Tag.OP8_MENOS);
@@ -496,5 +516,4 @@ public class sintatico {
             throw tokenDesconhecido();
         }
     }
-
 }

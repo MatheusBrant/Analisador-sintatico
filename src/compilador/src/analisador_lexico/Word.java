@@ -28,7 +28,7 @@ public class Word extends Token {
     public static final Word doOp = new Word("do",Tag.P15_DO);
     public static final Word in = new Word("in",Tag.P16_IN);
     public static final Word out = new Word("out",Tag.P17_OUT);
-    public static final Word end_final = new Word("end.",Tag.P18_END_FINAL);
+    public static final Word end_final = new Word("end",Tag.P18_END_FINAL);
 
     public static final Word igual_igual = new Word("==",Tag.OP1_IGUAL_IGUAL);
     public static final Word maior_que = new Word(">",Tag.OP2_MAIOR_QUE);
