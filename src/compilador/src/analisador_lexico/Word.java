@@ -14,7 +14,7 @@ public class Word extends Token {
     public static final Word program = new Word("program",Tag.P1_PROGRAM);
     public static final Word is = new Word("is",Tag.P2_IS);
     public static final Word declare = new Word("declare",Tag.P3_DECLARE);
-    public static final Word init = new Word("init",Tag.P4_INIT);
+    public static final Word init = new Word("begin",Tag.P4_INIT);
     public static final Word end = new Word("end",Tag.P5_END);
     public static final Word intVar = new Word("int",Tag.P6_INT);
     public static final Word floatVar = new Word("float",Tag.P7_FLOAT);

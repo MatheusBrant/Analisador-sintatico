@@ -14,7 +14,7 @@ public class sintatico {
     }
 
     private Exception tokenDesconhecido(){
-        return new Exception("Erro: token inesperado encontrado na linha " + lexema.getLine() + ": " + tagToken.toString());
+        return new Exception("Erro: Token incorreto reportado na linha -> " + lexema.getLine() + ": " + tagToken.toString());
     }
 
     public void scanner() throws Exception{
@@ -128,6 +128,7 @@ public class sintatico {
             //LAMBDA
         }
         else{
+
             throw tokenDesconhecido();
         }
     }
@@ -187,7 +188,8 @@ public class sintatico {
             read_stmt();
         } else if(tagToken.match(Tag.P17_OUT)){
             write_stmt();
-        } else{
+        }
+        else{
             throw tokenDesconhecido();
         }
     }
@@ -407,6 +409,20 @@ public class sintatico {
             addop();
             term();
             simple_expr_novo();
+        } else if(tagToken.match(Tag.PONT5_PONTO_E_VIRGULA)
+                ||tagToken.match(Tag.P18_END_FINAL)
+                ||tagToken.match(Tag.P11_ELSE)
+                ||tagToken.match(Tag.P13_UNTIL)
+                ||tagToken.match(Tag.OP1_IGUAL_IGUAL)
+                ||tagToken.match(Tag.OP2_MAIOR_QUE)
+                ||tagToken.match(Tag.OP3_MAIOR_OU_IGUAL)
+                ||tagToken.match(Tag.OP4_MENOR_QUE)
+                ||tagToken.match(Tag.OP5_MENOR_OU_IGUAL)
+                ||tagToken.match(Tag.OP6_DIFERENTE)
+                ||tagToken.match(Tag.P10_THEN)
+                ||tagToken.match(Tag.P15_DO)
+                ||tagToken.match(Tag.PONT3_FECHA_PAR)){
+            //LAMBDA
         }
         else{
             throw tokenDesconhecido();
@@ -449,6 +465,23 @@ public class sintatico {
             mulop();
             factor_a();
             term_novo();
+        } else if(tagToken.match(Tag.PONT5_PONTO_E_VIRGULA)
+                ||tagToken.match(Tag.P18_END_FINAL)
+                ||tagToken.match(Tag.P11_ELSE)
+                ||tagToken.match(Tag.P13_UNTIL)
+                ||tagToken.match(Tag.OP8_MENOS)
+                ||tagToken.match(Tag.OP7_MAIS)
+                ||tagToken.match(Tag.OP9_OU)
+                ||tagToken.match(Tag.OP1_IGUAL_IGUAL)
+                ||tagToken.match(Tag.OP2_MAIOR_QUE)
+                ||tagToken.match(Tag.OP3_MAIOR_OU_IGUAL)
+                ||tagToken.match(Tag.OP4_MENOR_QUE)
+                ||tagToken.match(Tag.OP5_MENOR_OU_IGUAL)
+                ||tagToken.match(Tag.OP6_DIFERENTE)
+                ||tagToken.match(Tag.P10_THEN)
+                ||tagToken.match(Tag.P15_DO)
+                ||tagToken.match(Tag.PONT3_FECHA_PAR)){
+            //LAMBDA){
         }
         else{
             throw tokenDesconhecido();

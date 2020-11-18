@@ -1,4 +1,5 @@
 program teste6 is
-    begin
-        b = 0;
-    end.
+begin
+    repeat x = x + 5
+    until x == 1000
+end.
